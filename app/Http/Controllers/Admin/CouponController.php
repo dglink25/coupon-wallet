@@ -46,7 +46,7 @@ class CouponController extends Controller
 
         return redirect()
             ->route('admin.coupons.index')
-            ->with('status', 'Coupon cree avec succes.');
+            ->with('status', 'Coupon créé avec succès.');
     }
 
     public function toggle(Coupon $coupon): RedirectResponse
@@ -54,7 +54,7 @@ class CouponController extends Controller
         $coupon->update(['is_active' => ! $coupon->is_active]);
 
         return back()->with('status', $coupon->is_active
-            ? 'Coupon active.'
-            : 'Coupon desactive.');
+            ? 'Coupon activé.'
+            : 'Coupon désactivé.');
     }
 }

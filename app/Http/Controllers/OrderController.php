@@ -50,7 +50,7 @@ class OrderController extends Controller
 
         return redirect()
             ->route('orders.index')
-            ->with('status', 'Commande simulee creee (en attente de paiement).');
+            ->with('status', 'Commande simulée créée avec succès (en attente de paiement).');
     }
 
     /**
@@ -67,6 +67,6 @@ class OrderController extends Controller
 
         return redirect()
             ->route('orders.index')
-            ->with('status', 'Commande marquee comme payee.');
+            ->with('status', 'Commande marquée comme payée.');
     }
 }

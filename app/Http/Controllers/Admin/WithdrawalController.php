@@ -44,7 +44,7 @@ class WithdrawalController extends Controller
             return back()->withErrors(['approved_amount' => $e->getMessage()]);
         }
 
-        return back()->with('status', 'Demande de retrait approuvee.');
+        return back()->with('status', 'Demande de retrait approuvée.');
     }
 
     public function reject(Request $request, WithdrawalRequest $withdrawal): RedirectResponse
@@ -55,6 +55,6 @@ class WithdrawalController extends Controller
 
         $this->withdrawals->reject($withdrawal, $request->user(), $validated['reason']);
 
-        return back()->with('status', 'Demande de retrait rejetee.');
+        return back()->with('status', 'Demande de retrait rejetée.');
     }
 }

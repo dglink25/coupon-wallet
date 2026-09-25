@@ -36,6 +36,6 @@ class WithdrawalRequestController extends Controller
 
         return redirect()
             ->route('withdrawals.create')
-            ->with('status', 'Demande de retrait envoyee, en attente de validation.');
+            ->with('status', 'Demande de retrait envoyée, en attente de validation.');
     }
 }
