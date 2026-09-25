@@ -4,7 +4,6 @@
 
 @section('content')
 
-{{-- ── En-tête ──────────────────────────────────────────────────────────── --}}
 <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 page-header">
     <div>
         <h3><i class="bi bi-bag me-2" style="color:var(--brand);"></i>Mes commandes</h3>
@@ -15,7 +14,6 @@
     </a>
 </div>
 
-{{-- ── Tableau des commandes ────────────────────────────────────────────── --}}
 <div class="card">
     <div class="table-responsive">
         <table class="table mb-0">
@@ -28,7 +26,7 @@
                     <th>Net à payer</th>
                     <th>Date</th>
                     <th>Statut</th>
-                    <th></th>
+                    <th class="text-end" style="min-width:200px;">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -46,7 +44,7 @@
                         <td>
                             @if($order->discount_amount > 0)
                                 <span style="color:#155c37;font-weight:600;">
-                                    −{{ number_format($order->discount_amount, 2) }} F
+                                    &minus;{{ number_format($order->discount_amount, 2) }} F
                                 </span>
                             @else
                                 <span style="color:var(--muted);">—</span>
@@ -66,20 +64,37 @@
                             @endif
                         </td>
                         <td class="text-end">
-                            @if($order->status !== 'paid')
-                                <form action="{{ route('orders.pay', $order) }}" method="POST"
-                                      onsubmit="return confirm('Confirmer le paiement de la commande #{{ $order->id }} ?')">
-                                    @csrf
-                                    <button class="btn btn-sm btn-outline-brand" type="submit">
-                                        <i class="bi bi-check2-circle me-1"></i>Marquer payée
-                                    </button>
-                                </form>
-                            @else
-                                <span style="font-size:.75rem;color:var(--muted);">
-                                    <i class="bi bi-check-circle-fill text-success me-1"></i>
-                                    {{ $order->paid_at?->format('d/m/Y') }}
-                                </span>
-                            @endif
+                            <div class="d-flex justify-content-end gap-1">
+
+                                @if($order->status !== 'paid')
+                                    {{-- Marquer comme payée --}}
+                                    <form action="{{ route('orders.pay', $order) }}" method="POST"
+                                          onsubmit="return confirm('Confirmer le paiement de la commande #{{ $order->id }} ?')">
+                                        @csrf
+                                        <button class="btn btn-sm btn-outline-brand" type="submit"
+                                                title="Marquer comme payée">
+                                            <i class="bi bi-check2-circle"></i>
+                                        </button>
+                                    </form>
+
+                                    {{-- Supprimer --}}
+                                    <form action="{{ route('orders.destroy', $order) }}" method="POST"
+                                          onsubmit="return confirm('Supprimer définitivement la commande #{{ $order->id }} ?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn btn-sm btn-outline-danger" type="submit"
+                                                title="Supprimer">
+                                            <i class="bi bi-trash3"></i>
+                                        </button>
+                                    </form>
+                                @else
+                                    <span style="font-size:.75rem;color:var(--muted);">
+                                        <i class="bi bi-check-circle-fill text-success me-1"></i>
+                                        {{ $order->paid_at?->format('d/m/Y') }}
+                                    </span>
+                                @endif
+
+                            </div>
                         </td>
                     </tr>
                 @empty
@@ -90,7 +105,7 @@
                                 <div style="font-weight:600;">Aucune commande pour le moment</div>
                                 <div style="font-size:.8rem;margin-top:.4rem;">
                                     <a href="{{ route('orders.create') }}" style="color:var(--brand);font-weight:500;">
-                                        Créez votre première commande simulée
+                                        Créer votre première commande simulée
                                     </a>
                                 </div>
                             </div>
@@ -102,8 +117,6 @@
     </div>
 </div>
 
-<div class="mt-3 d-flex justify-content-end">
-    {{ $orders->links() }}
-</div>
+<div class="mt-3 d-flex justify-content-end">{{ $orders->links() }}</div>
 
 @endsection

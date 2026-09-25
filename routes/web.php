@@ -45,11 +45,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/withdrawals', [WithdrawalRequestController::class, 'create'])->name('withdrawals.create');
     Route::post('/withdrawals', [WithdrawalRequestController::class, 'store'])->name('withdrawals.store');
 
+    // Suppression d'une commande en attente (cote utilisateur).
+    Route::delete('/orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
+
     // Back-office administrateur.
     Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/coupons', [CouponController::class, 'index'])->name('coupons.index');
         Route::get('/coupons/create', [CouponController::class, 'create'])->name('coupons.create');
         Route::post('/coupons', [CouponController::class, 'store'])->name('coupons.store');
+        Route::get('/coupons/{coupon}/edit', [CouponController::class, 'edit'])->name('coupons.edit');
+        Route::put('/coupons/{coupon}', [CouponController::class, 'update'])->name('coupons.update');
+        Route::delete('/coupons/{coupon}', [CouponController::class, 'destroy'])->name('coupons.destroy');
         Route::post('/coupons/{coupon}/toggle', [CouponController::class, 'toggle'])->name('coupons.toggle');
 
         Route::get('/withdrawals', [WithdrawalController::class, 'index'])->name('withdrawals.index');

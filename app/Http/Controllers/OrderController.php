@@ -54,8 +54,8 @@ class OrderController extends Controller
     }
 
     /**
-     * Marque la commande comme payee : c'est ce declencheur qui, en
-     * presence d'un coupon, credite la commission de l'ambassadeur.
+     * Marque la commande comme payée : c'est ce déclencheur qui, en
+     * présence d'un coupon, crédite la commission de l'ambassadeur.
      */
     public function pay(Request $request, Order $order): RedirectResponse
     {
@@ -68,5 +68,29 @@ class OrderController extends Controller
         return redirect()
             ->route('orders.index')
             ->with('status', 'Commande marquée comme payée.');
+    }
+
+    /**
+     * Supprime une commande uniquement si elle est encore en attente de paiement.
+     * Une commande payée ne peut pas être supprimée (la commission est déjà créditée).
+     */
+    public function destroy(Request $request, Order $order): RedirectResponse
+    {
+        if ($order->user_id !== $request->user()->id) {
+            abort(403);
+        }
+
+        if ($order->isPaid()) {
+            return back()->with(
+                'error',
+                'Impossible de supprimer une commande déjà payée.'
+            );
+        }
+
+        $order->delete();
+
+        return redirect()
+            ->route('orders.index')
+            ->with('status', 'Commande supprimée.');
     }
 }

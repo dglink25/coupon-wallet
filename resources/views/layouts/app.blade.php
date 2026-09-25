@@ -462,6 +462,13 @@
             </div>
         @endif
 
+        @if(session('error'))
+            <div class="flash-alert flash-danger d-flex align-items-center gap-2 mb-4">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                {{ session('error') }}
+            </div>
+        @endif
+
         @if($errors->any())
             <div class="flash-alert flash-danger mb-4">
                 <div class="d-flex align-items-start gap-2">
